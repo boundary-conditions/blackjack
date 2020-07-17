@@ -71,19 +71,34 @@ class Dealer:
 def add_hand(hand, is_dealer=False): #has to go after each deal/hit
     total = 0
     if is_dealer:
-        
-    for i in hand:
-        if i == 'A':
-            print(f"Player has {hand}...")
-            ace = input("Ace high? y/n: ").strip().lower()
-            if ace == 'y':
-                i = '11'
+        aces = 0
+        for i in hand:
+            if i in "JQK":
+                i = 10
+                total += i
+            elif i in "23456789":
+                total += int(i)
             else:
-                i = '1'
-        try:
-            total += int(i)
-        except:
-            total += 10
+                aces += 1
+        if aces == 1 and total < 11:
+            total += 11
+        elif aces == 1 and total >= 11:
+            total += 1
+        elif aces == 2:
+            total += 12
+    else:
+        for i in hand:
+            if i == 'A':
+                print(f"Player has {hand}...")
+                ace = input("Ace high? y/n: ").strip().lower()
+                if ace == 'y':
+                    i = '11'
+                else:
+                    i = '1'
+            try:
+                total += int(i)
+            except:
+                total += 10
     if total < 21:    
         return total
     elif total == 21:
