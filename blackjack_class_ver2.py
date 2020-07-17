@@ -46,7 +46,8 @@ class Player:
     
     def display_hand(self):
         hand = self.cards_var.hands[self.player_number]
-        print(f"{self.player_name} has {hand} for {add_hand(hand)}")
+        if len(hand) == 2:
+            print(f"{self.player_name} has {hand} for {add_hand(hand)}")
         
 
         
@@ -99,11 +100,14 @@ def add_hand(hand, is_dealer=False): #has to go after each deal/hit
                 total += int(i)
             except:
                 total += 10
-    if total < 21:    
+    if total < 21:
+        hand += [total]
         return total
     elif total == 21:
+        hand += [total]
         return "{total} Blackjack!"
     else:
+        hand += [total]
         return f"{total}, Bust!"
     
         
@@ -114,12 +118,13 @@ print("Let's play blackjack!")
 
 
 deck = Cards()
+deck.shuffle()
 charles = Player(deck, 'Charles')
 colleen = Player(deck, 'Colleen', 2)
+dealer = Dealer(deck)
 deck.deal(3)
-deck.hands
 charles.display_hand()
 colleen.display_hand()
-deck.hit(1)
+dealer.display_hand()
 
 
