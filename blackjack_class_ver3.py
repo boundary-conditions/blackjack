@@ -23,14 +23,14 @@ class Cards:
         self.tot_players = tot_players
         for player in range(tot_players):
             new_hand = [self.cards[player], self.cards[player + tot_players]]
-            self.hands[player] = {"player cards": new_hand, "score": 0}
+            self.hands[player] = {"player cards": new_hand, "score": add_hand(new_hand)}
         self.cards = self.cards[tot_players*2:]
         
     def hit(self, player):
         self.player = player
         self.hands[player]["player cards"] += [self.cards[0]]
         self.cards = self.cards[1:]
-        #self.hands[player][2] = self.hands[player][2]
+        self.hands[player]["score"] = self.hands[player]["score"] + int(self.hands[player]["player cards"][-1])
             
             #take the number of players including dealer, multiply by two, then set that number as a range
             #then iterate over the range taking 
@@ -49,9 +49,9 @@ class Player:
         hand = self.cards_var.hands[self.player_number]["player cards"]
         score = self.cards_var.hands[self.player_number]["score"]
         if len(hand) == 2:
-            print(f"{self.player_name} has {hand} for {add_hand(hand, score)}")
+            print(f"{self.player_name} has {hand} for {score}")
         else:
-            print(f"{self.player_name} has {hand}")
+            print(f"{self.player_name} has {hand} for {score}")
         
 
         
@@ -68,16 +68,17 @@ class Dealer:
         if self.hole:
             print(f"{self.player_name} has {hand[0]} with a card in the hole.")
         else:
-            print(f"{self.player_name} has {hand} for {add_hand(hand, score, is_dealer = True)}")
+            print(f"{self.player_name} has {hand} for {add_hand(hand, is_dealer = True)}")
         
 def add_hit(hand):
     pass
+    
     
      
         
     
     
-def add_hand(hand, score, is_dealer=False): #has to go after each deal/hit
+def add_hand(hand, is_dealer=False): #has to go after each deal/hit
     total = 0
     if is_dealer:
         aces = 0
@@ -108,15 +109,16 @@ def add_hand(hand, score, is_dealer=False): #has to go after each deal/hit
                 total += int(i)
             except:
                 total += 10
-    if total < 21:
-        score = [total]
-        return total
-    elif total == 21:
-        score = [total]
-        return "{total} Blackjack!"
-    else:
-        score = [total]
-        return f"{total}, Bust!"
+    return total
+    # if total < 21:
+    #     score = [total]
+    #     return total
+    # elif total == 21:
+    #     score = [total]
+    #     return "{total} Blackjack!"
+    # else:
+    #     score = [total]
+    #     return f"{total}, Bust!"
     
         
 
