@@ -16,21 +16,45 @@ class Cards:
         self.hands = {} #will contain player keys with hands values as tuples
         self.ledger = {} # will contain player keys with balance values as integers
         
-    def shuffle(self):
-        random.shuffle(self.cards)
+    def shuffle(self, start_game = True): 
+        self.start_game = start_game
+        if start_game:
+            random.shuffle(self.cards)
+        else:
+            self.cards = self.cards + '2,3,4,5,6,7,8,9,10,J,Q,K,A'.split(',') * (self.decks * 4)
+            random.shuffle(self.cards)
+            
+        
+            
     
     def deal(self, tot_players):
         self.tot_players = tot_players
         for player in range(tot_players):
             new_hand = [self.cards[player], self.cards[player + tot_players]]
-            self.hands[player] = {"player cards": new_hand, "score": add_hand(new_hand)}
+            if player == 0:
+                self.hands[player] = {"player cards": new_hand, "score": add_hand(new_hand, is_dealer = True)}   
+            else:
+                self.hands[player] = {"player cards": new_hand, "score": add_hand(new_hand)}
         self.cards = self.cards[tot_players*2:]
         
     def hit(self, player):
         self.player = player
-        self.hands[player]["player cards"] += [self.cards[0]]
-        self.cards = self.cards[1:]
-        self.hands[player]["score"] = self.hands[player]["score"] + int(self.hands[player]["player cards"][-1])
+        self.hands[player]["player cards"] += [self.cards[0]] #adds card to hand
+        self.cards = self.cards[1:] #deletes card from deck
+        plus_score = self.hands[player]["player cards"][-1]
+        if plus_score in "JQK":
+            plus_score = 10
+        elif plus_score == "A":
+            ace = input("Aces high? y/n: ").strip().lower()
+            if ace == 'y':
+                plus_score = 11
+            else:
+                plus_score = 1
+        else:
+            plus_score = int(plus_score)
+        self.hands[player]["score"] = self.hands[player]["score"] + plus_score
+        
+                
             
             #take the number of players including dealer, multiply by two, then set that number as a range
             #then iterate over the range taking 
@@ -44,6 +68,7 @@ class Player:
         self.cards_var = cards_var
         self.player_name = player_name
         self.player_number = player_number
+        self.bank = buy_in
     
     def display_hand(self):
         hand = self.cards_var.hands[self.player_number]["player cards"]
@@ -68,13 +93,8 @@ class Dealer:
         if self.hole:
             print(f"{self.player_name} has {hand[0]} with a card in the hole.")
         else:
-            print(f"{self.player_name} has {hand} for {add_hand(hand, is_dealer = True)}")
+            print(f"{self.player_name} has {hand} for {score}")
         
-def add_hit(hand):
-    pass
-    
-    
-     
         
     
     
@@ -120,7 +140,15 @@ def add_hand(hand, is_dealer=False): #has to go after each deal/hit
     #     score = [total]
     #     return f"{total}, Bust!"
     
-        
+#  """ need to make a function that checks a players score and tells whether
+# they have busted/blackjack etc"""
+
+# """ need function that hits dealer until they reach 17 or more, and returns
+# whether they have bust/blackjack etc """
+
+# """ need game logic, to control oder of play, also need a class for "tokens"
+# to be able to bet, needs to expand options by the number of non dealer players
+# and offer opportunities to bet after each round? """       
 
 
 print("Let's play blackjack!")
