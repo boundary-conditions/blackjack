@@ -41,18 +41,23 @@ class Cards:
         self.player = player
         self.hands[player]["player cards"] += [self.cards[0]] #adds card to hand
         self.cards = self.cards[1:] #deletes card from deck
-        plus_score = self.hands[player]["player cards"][-1]
-        if plus_score in "JQK":
-            plus_score = 10
-        elif plus_score == "A":
-            ace = input("Aces high? y/n: ").strip().lower()
-            if ace == 'y':
-                plus_score = 11
-            else:
-                plus_score = 1
+        new_hand =  self.hands[player]["player cards"] #readable variable for function
+        if player == 0:
+            self.hands[player]['score'] = add_hand(new_hand, is_dealer = True)  
         else:
-            plus_score = int(plus_score)
-        self.hands[player]["score"] = self.hands[player]["score"] + plus_score
+            self.hands[player]["score"] = add_hand(new_hand)
+        #plus_score = self.hands[player]["player cards"][-1]
+        # if plus_score in "JQK":
+        #     plus_score = 10
+        # elif plus_score == "A":
+        #     ace = input("Aces high? y/n: ").strip().lower()
+        #     if ace == 'y':
+        #         plus_score = 11
+        #     else:
+        #         plus_score = 1
+        # else:
+        #     plus_score = int(plus_score)
+        # self.hands[player]["score"] = self.hands[player]["score"] + plus_score
         
                 
             
