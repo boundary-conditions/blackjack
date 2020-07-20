@@ -16,10 +16,14 @@ Some things id like to add to this game are:
 6. doubling down when first two cards equal 9 10 or 11, one more card is dealt face down and settled at end of round
 7.
 """
+import blackjackmodule
 
+bank = blackjackmodule.Bank()
 
 print("Welcome to the pysino! Let's play some Blackjack!")
 print("=================================================")
+
+
 number_of_players = input("How many players are there today? (1-3): ")
 while True:
     if number_of_players in '123':
@@ -28,12 +32,31 @@ while True:
     else:
         number_of_players = input("How many players are there today? (1-3): ")
 
+#initialize cards
+number_of_decks = input("How many decks should we play with? (1-4): ")
+while True:
+    if number_of_decks in '1234':
+        number_of_decks = int(number_of_decks)
+        break
+    else:
+        number_of_decks = input("How many decks should we play with? (1-4): ")
+cards = blackjackmodule.Cards(decks = number_of_decks)
+
         
 if number_of_players > 0:
     player_one = input("Enter player one's name: ")
+    player_one = blackjackmodule.Player(cards, bank, player_one, player_number = 1)
     if number_of_players > 1:
         player_two = input("Enter player two's name: ")
+        player_two = blackjackmodule.Player(cards, bank, player_two, player_number = 2)
         if number_of_players > 2:
             player_three = input("Enter player three's name: ")
+            player_three = blackjackmodule.Player(cards, bank, player_three, player_number = 3)
+            
+            
+
+            
+
+
 
     
