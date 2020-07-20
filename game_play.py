@@ -31,13 +31,17 @@ def hit_function():
             if cards.hands[player.player_number]['score'] < 21:
                 player.display_hand()
                 hit_function()
-                return 0
+                break
             elif cards.hands[player.player_number]['score'] == 21:
-                return 1  #blackjack
+                break
             else:
-                return -1 #bust
-    else:
+                break
+    if cards.hands[player.player_number]['score'] < 21:
         return 0
+    elif cards.hands[player.player_number]['score'] == 21:
+        return 1
+    else:
+        return -1
 
 
 print("Welcome to the pysino! Let's play some Blackjack!")
