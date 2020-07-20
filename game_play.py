@@ -62,13 +62,18 @@ if number_of_players > 0:
             
 cards.shuffle()
 
-# for player in player_list:
-#     while True:
-#         amount = input("Place a bet between $2 and $20: ")
-#         if int(a
-    
-#     bank.bet(player.player_number, amount)
-# cards.deal(number_of_players +1)
+for player in player_list:
+    while True:
+        amount = input("Place a $ bet. (2, 5, 10 or 20): ")
+        if amount in ['2', '5', '10', '20']:
+            amount = int(amount)
+            bank.bet(player.player_number, amount)
+            break
+
+
+
+
+cards.deal(number_of_players +1)
             
             
 
