@@ -17,3 +17,23 @@ Some things id like to add to this game are:
 7.
 """
 
+
+print("Welcome to the pysino! Let's play some Blackjack!")
+print("=================================================")
+number_of_players = input("How many players are there today? (1-3): ")
+while True:
+    if number_of_players in '123':
+        number_of_players = int(number_of_players)
+        break
+    else:
+        number_of_players = input("How many players are there today? (1-3): ")
+
+        
+if number_of_players > 0:
+    player_one = input("Enter player one's name: ")
+    if number_of_players > 1:
+        player_two = input("Enter player two's name: ")
+        if number_of_players > 2:
+            player_three = input("Enter player three's name: ")
+
+    

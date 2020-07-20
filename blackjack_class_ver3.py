@@ -114,10 +114,6 @@ class Player:
         self.bank_var = bank_var
         self.player_name = player_name
         self.player_number = player_number
-        
-    # def buy_in(self, amount):
-    #     self.amount = amount
-    #     self.bank_var.ledger[self.player_number]['balance'] = self.amount
 
     
     def display_hand(self):
