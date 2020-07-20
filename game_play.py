@@ -95,14 +95,20 @@ for player in player_list:
             break
 
 cards.deal(number_of_players +1)
-
+"""
+lets put these two sections together somehow, and make the game know to not offer a
+blackjack hand the opportunity to hit
+"""
 DEALER.display_hand()
 for player in player_list:
     player.display_hand()
+    if cards.hands[player.player_number]['score'] == 21:
+        bank.ledger[player.player_number]['result'] = 1
+        continue
+    else:
+        bank.ledger[player.player_number]['result'] = hit_function()
 #need to check for blackjack
-
-for player in player_list:
-   bank.ledger[player.player_number]['result'] = hit_function()
+   
 
 DEALER.display_hand(hole=False)
 while True:
