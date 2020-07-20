@@ -22,7 +22,7 @@ class Cards:
             self.cards = self.cards + '2,3,4,5,6,7,8,9,10,J,Q,K,A'.split(',') * (self.decks * 4)
             random.shuffle(self.cards)
             
-    def add_hand(self, hand, is_dealer=False): #has to go after each deal/hit
+    def add_hand(self, hand, player_num=0, is_dealer=False): #has to go after each deal/hit
         total = 0
         if is_dealer:
             aces = 0
@@ -42,8 +42,11 @@ class Cards:
                 total += 12
         else:
             for i in hand:
-                if i == 'A':
-                    print(f"Player has {hand}...")
+                if i == 'A' and hand.index(i) == 0: #A will come before other letters, but after numbers
+                    print("Blackjack!")
+                    total = 21
+                elif i == 'A':
+                    print(f"Player {player_num} has {hand}...")
                     ace = input("Ace high? y/n: ").strip().lower()
                     if ace == 'y':
                         i = '11'
@@ -60,12 +63,13 @@ class Cards:
         self.total_players = total_players
         for player_number in range(total_players):
             new_hand = [self.cards[player_number], self.cards[player_number + total_players]]
+            new_hand.sort()
             if player_number == 0:
                 self.hands[player_number] = {"player cards": new_hand, 
                                              "score": self.add_hand(new_hand, is_dealer = True)}   
             else:
                 self.hands[player_number] = {"player cards": new_hand, 
-                                             "score": self.add_hand(new_hand)}
+                                             "score": self.add_hand(new_hand, player_num = player_number)}
         self.cards = self.cards[total_players*2:]
         
     def hit(self, player_number):
@@ -76,7 +80,7 @@ class Cards:
         if player_number == 0:
             self.hands[player_number]['score'] = self.add_hand(new_hand, is_dealer = True)  
         else:
-            self.hands[player_number]["score"] = self.add_hand(new_hand)
+            self.hands[player_number]["score"] = self.add_hand(new_hand, player_num = player_number)
             
 
             #THIS WORKS
@@ -119,8 +123,8 @@ class Player:
     def display_hand(self):
         hand = self.cards_var.hands[self.player_number]["player cards"]
         score = self.cards_var.hands[self.player_number]["score"]
-        if len(hand) == 2:
-            print(f"{self.player_name} has {hand} for {score}")
+        if len(hand) == 2 and score == 21:
+            print(f"{self.player_name} has {hand} for {score}... Blackjack!")
         else:
             print(f"{self.player_name} has {hand} for {score}")
             

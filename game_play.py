@@ -20,6 +20,26 @@ import blackjackmodule
 
 bank = blackjackmodule.Bank()
 
+def hit_function():
+    while True:
+        hit = input(f"{player.player_name} hit? y/n: ").strip().lower() #ask for input
+        if hit == 'y' or hit == 'n': #check if its valid
+            break #if it is, move on
+    if hit == 'y':
+        cards.hit(player.player_number) #if its yes, do things
+        while True:
+            if cards.hands[player.player_number]['score'] < 21:
+                player.display_hand()
+                hit_function()
+                return 0
+            elif cards.hands[player.player_number]['score'] == 21:
+                return 1  #blackjack
+            else:
+                return -1 #bust
+    else:
+        return 0
+
+
 print("Welcome to the pysino! Let's play some Blackjack!")
 print("=================================================")
 
@@ -41,7 +61,7 @@ while True:
     else:
         number_of_decks = input("How many decks should we play with? (1-4): ")
 cards = blackjackmodule.Cards(decks = number_of_decks)
-
+DEALER = blackjackmodule.Dealer(cards)
 
 player_list = []        
 if number_of_players > 0:
@@ -70,15 +90,27 @@ for player in player_list:
             bank.bet(player.player_number, amount)
             break
 
-
-
-
 cards.deal(number_of_players +1)
+
+DEALER.display_hand()
+for player in player_list:
+    player.display_hand()
+#need to check for blackjack
+
+for player in player_list:
+   bank.ledger[player.player_number]['result'] = hit_function()
+
+cards.hit(0)
+  
+       
             
             
 
-            
+#dealer plays next, then at the end of the round any players with bets remaining have their hand settled against dealer
 
-
-
-    
+ # if hit > 0:
+   #     winning = bank.ledger[player.player_number]['bet'] * 2 #pays 2:1
+   #     bank.ledger[player.player_number]['balance'] += winning
+   #     bank.ledger[player.player_number]['bet'] = 0
+   # elif hit < 0:
+   #     bank.ledger[player.player_number]['bet'] = 0
