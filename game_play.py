@@ -104,8 +104,20 @@ for player in player_list:
 for player in player_list:
    bank.ledger[player.player_number]['result'] = hit_function()
 
-cards.hit(0)
-  
+DEALER.display_hand(hole=False)
+while True:
+    if cards.hands[0]['score'] == 21:
+        print("Blackjack!")
+        break
+    elif cards.hands[0]['score'] < 17:
+        cards.hit(0)
+        DEALER.display_hand(hole=False)
+    else:
+        DEALER.display_hand(hole=False)
+        break
+        
+        
+    
        
             
             

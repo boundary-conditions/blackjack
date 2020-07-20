@@ -45,6 +45,7 @@ class Cards:
                 if i == 'A' and hand.index(i) == 0: #A will come before other letters, but after numbers
                     print("Blackjack!")
                     total = 21
+                    return total
                 elif i == 'A':
                     print(f"Player {player_num} has {hand}...")
                     ace = input("Ace high? y/n: ").strip().lower()
