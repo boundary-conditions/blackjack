@@ -124,6 +124,10 @@ class Player:
         else:
             print(f"{self.player_name} has {hand} for {score}")
             
+    def display_balance(self):
+        balance = self.bank_var.ledger[self.player_number]["balance"]
+        print(f"{self.player_name} has ${balance}")
+            
     
         
 

@@ -26,7 +26,7 @@ print("=================================================")
 
 number_of_players = input("How many players are there today? (1-3): ")
 while True:
-    if number_of_players in '123':
+    if number_of_players in '123' and len(number_of_players) == 1:
         number_of_players = int(number_of_players)
         break
     else:
@@ -35,23 +35,40 @@ while True:
 #initialize cards
 number_of_decks = input("How many decks should we play with? (1-4): ")
 while True:
-    if number_of_decks in '1234':
+    if number_of_decks in '1234' and len(number_of_decks) == 1:
         number_of_decks = int(number_of_decks)
         break
     else:
         number_of_decks = input("How many decks should we play with? (1-4): ")
 cards = blackjackmodule.Cards(decks = number_of_decks)
 
-        
+
+player_list = []        
 if number_of_players > 0:
     player_one = input("Enter player one's name: ")
     player_one = blackjackmodule.Player(cards, bank, player_one, player_number = 1)
+    bank.buy_in(1, 100)
+    player_list.append(player_one)
     if number_of_players > 1:
         player_two = input("Enter player two's name: ")
         player_two = blackjackmodule.Player(cards, bank, player_two, player_number = 2)
+        bank.buy_in(2, 100)
+        player_list.append(player_two)
         if number_of_players > 2:
             player_three = input("Enter player three's name: ")
             player_three = blackjackmodule.Player(cards, bank, player_three, player_number = 3)
+            bank.buy_in(3,100)
+            player_list.append(player_three)
+            
+cards.shuffle()
+
+# for player in player_list:
+#     while True:
+#         amount = input("Place a bet between $2 and $20: ")
+#         if int(a
+    
+#     bank.bet(player.player_number, amount)
+# cards.deal(number_of_players +1)
             
             
 
