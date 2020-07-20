@@ -9,12 +9,10 @@ import random
 
 
 class Cards:
-    def __init__(self, bank = 500, decks = 1):
-        self.bank = bank #amount to initialize bank with
+    def __init__(self, decks = 1):
         self.decks = decks #how many decks to play with
         self.cards = '2,3,4,5,6,7,8,9,10,J,Q,K,A'.split(',') * (self.decks * 4) #create deck
         self.hands = {} # each player key has a dictionary containing cards and score
-        self.ledger = {} # will contain player keys with balance values as integers
         
     def shuffle(self, start_game = True): 
         self.start_game = start_game
@@ -58,37 +56,69 @@ class Cards:
         return total
                 
             
-    def deal(self, tot_players):
-        self.tot_players = tot_players
-        for player in range(tot_players):
-            new_hand = [self.cards[player], self.cards[player + tot_players]]
-            if player == 0:
-                self.hands[player] = {"player cards": new_hand, "score": self.add_hand(new_hand, is_dealer = True)}   
+    def deal(self, total_players):
+        self.total_players = total_players
+        for player_number in range(total_players):
+            new_hand = [self.cards[player_number], self.cards[player_number + total_players]]
+            if player_number == 0:
+                self.hands[player_number] = {"player cards": new_hand, 
+                                             "score": self.add_hand(new_hand, is_dealer = True)}   
             else:
-                self.hands[player] = {"player cards": new_hand, "score": self.add_hand(new_hand)}
-        self.cards = self.cards[tot_players*2:]
+                self.hands[player_number] = {"player cards": new_hand, 
+                                             "score": self.add_hand(new_hand)}
+        self.cards = self.cards[total_players*2:]
         
-    def hit(self, player):
-        self.player = player
-        self.hands[player]["player cards"] += [self.cards[0]] #adds card to hand
+    def hit(self, player_number):
+        self.player_number = player_number
+        self.hands[player_number]["player cards"] += [self.cards[0]] #adds card to hand
         self.cards = self.cards[1:] #deletes card from deck
-        new_hand =  self.hands[player]["player cards"] #readable variable for function
-        if player == 0:
-            self.hands[player]['score'] = self.add_hand(new_hand, is_dealer = True)  
+        new_hand =  self.hands[player_number]["player cards"] #readable variable for function
+        if player_number == 0:
+            self.hands[player_number]['score'] = self.add_hand(new_hand, is_dealer = True)  
         else:
-            self.hands[player]["score"] = self.add_hand(new_hand)
-        
+            self.hands[player_number]["score"] = self.add_hand(new_hand)
             
+
             #THIS WORKS
+            
+class Bank:
+    def __init__(self, bank = 500):
+        self.bank = bank #amount to initialize bank with
+        self.ledger = {} # will contain player keys with balance values as integers
+        
+    def buy_in(self, player_number, amount):
+        self.player_number = player_number
+        self.amount = amount
+        self.ledger[player_number] = {'balance': self.amount}
+     
+     
+    def bet(self, player_number, amount, is_split = False):
+        self.player_number = player_number
+        self.amount = amount
+        self.ledger[player_number]['balance'] -= self.amount
+        if is_split:
+            self.ledger[player_number]['split'] = self.amount
+        else:
+            self.ledger[player_number]['bet'] = self.amount
+            
+    def double_down(self, player_number):
+        original_bet = self.ledger[player_number]['bet']
+        self.ledger[player_number]['balance'] -= original_bet
+        self.ledger[player_number]['bet'] *= 2
             
 
     
 class Player:
-    def __init__(self, cards_var, player_name, player_number = 1, buy_in = 100):
+    def __init__(self, cards_var, bank_var, player_name, player_number = 1):
         self.cards_var = cards_var
+        self.bank_var = bank_var
         self.player_name = player_name
         self.player_number = player_number
-        self.bank = buy_in
+        
+    # def buy_in(self, amount):
+    #     self.amount = amount
+    #     self.bank_var.ledger[self.player_number]['balance'] = self.amount
+
     
     def display_hand(self):
         hand = self.cards_var.hands[self.player_number]["player cards"]
@@ -97,6 +127,8 @@ class Player:
             print(f"{self.player_name} has {hand} for {score}")
         else:
             print(f"{self.player_name} has {hand} for {score}")
+            
+    
         
 
         
@@ -128,8 +160,9 @@ class Dealer:
 
 deck = Cards()
 deck.shuffle()
-charles = Player(deck, 'Charles')
-colleen = Player(deck, 'Colleen', 2)
+bank = Bank()
+charles = Player(deck, bank, 'Charles')
+colleen = Player(deck, bank, 'Colleen', 2)
 dealer = Dealer(deck)
 deck.deal(3)
 charles.display_hand()
