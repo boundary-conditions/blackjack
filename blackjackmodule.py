@@ -43,11 +43,10 @@ class Cards:
         else:
             for i in hand:
                 if i == 'A' and hand.index(i) == 0: #A will come before other letters, but after numbers
-                    print("Blackjack!")
+                    print(f"{player_num} has {hand}, Blackjack!")
                     total = 21
                     return total
                 elif i == 'A':
-                    print("----------------------------")
                     print(f"Player {player_num} has {hand}...")
                     ace = input("Ace high? y/n: ").strip().lower()
                     if ace == 'y':
@@ -127,6 +126,7 @@ class Player:
         score = self.cards_var.hands[self.player_number]["score"]
         if len(hand) == 2 and score == 21:
             print(f"{self.player_name} has {hand} for {score}... Blackjack!")
+            print("---------------------------------------")
         else:
             print(f"{self.player_name} has {hand} for {score}")
             

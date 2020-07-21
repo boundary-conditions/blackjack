@@ -7,11 +7,7 @@ Created on Sun Jul 19 12:41:12 2020
 """
 """
 Some things id like to add to this game are:
-*Betting system needed*
 1. the ability to choose to have the deck cut or not
-2. opening bets, natural blackjack notice on first add_hand, 1.5 payout
-3. hit players one at a time until stand/bust/blackjack
-4. dealer plays by revealing second card, then hitting one at a time until >=17 or bust
 5. split pairs, players cards are divided and played individually, 1x payout for blackjack
 6. doubling down when first two cards equal 9 10 or 11, one more card is dealt face down and settled at end of round
 7.
@@ -24,7 +20,6 @@ bank = blackjackmodule.Bank()
 def hit_function():
     while True:
         hit = input(f"{player.player_name} hit? y/n: ").strip().lower() #ask for input
-        print("---------------------------------------")
         if hit == 'y' or hit == 'n': #check if its valid
             break #if it is, move on
     if hit == 'y':
@@ -35,9 +30,15 @@ def hit_function():
                 hit_function()
                 break
             elif cards.hands[player.player_number]['score'] == 21:
+                print("Blackjack!")
+                print("---------------------------------------")
                 break
             else:
+                print("Bust!")
+                print("---------------------------------------")
                 break
+    elif hit == 'n':
+        print("---------------------------------------")
     if cards.hands[player.player_number]['score'] < 21:
         return 0
     elif cards.hands[player.player_number]['score'] == 21:
@@ -75,16 +76,10 @@ DEALER = blackjackmodule.Dealer(cards)
 
 player_list = []        
 if number_of_players > 0:
-    while True:
-        try:
-            player_one = input("Enter player one's name: ")
-            player_one = blackjackmodule.Player(cards, bank, player_one, player_number = 1)
-            bank.buy_in(1, 100)
-            cards.hands[1]
-            player_list.append(player_one)
-        except:
-            print("Please enter a name...")
-            continue
+    player_one = input("Enter player one's name: ")
+    player_one = blackjackmodule.Player(cards, bank, player_one, player_number = 1)
+    bank.buy_in(1, 100)
+    player_list.append(player_one)
     if number_of_players > 1:
         player_two = input("Enter player two's name: ")
         player_two = blackjackmodule.Player(cards, bank, player_two, player_number = 2)
@@ -102,7 +97,7 @@ while True:
 
     for player in player_list:
         while True:
-            amount = input("Place a $ bet. (2, 5, 10 or 20): ")
+            amount = input(f"{player.player_name} place a $ bet. (2, 5, 10 or 20): ")
             if amount in ['2', '5', '10', '20']:
                 amount = int(amount)
                 bank.bet(player.player_number, amount)
@@ -112,8 +107,11 @@ while True:
     cards.deal(number_of_players +1)
     
     print("===========================")
+    print("\n")
     DEALER.display_hand()
+    print("\n")
     print("+++++++++++++++++++++++++++")
+    print("\n")
     for player in player_list:
         player.display_hand()
         if cards.hands[player.player_number]['score'] == 21:
@@ -127,14 +125,24 @@ while True:
     
     while True:
         if cards.hands[0]['score'] == 21:
+            print("---------------------------------------")
             DEALER.display_hand(hole=False)
-            print("Blackjack!")
+            print("Dealer has Blackjack!")
             break
         elif cards.hands[0]['score'] < 17:
+            print("---------------------------------------")
+            DEALER.display_hand(hole=False)
+            print("Dealer hits...")
             cards.hit(0)
+        elif cards.hands[0]['score'] >= 17 and cards.hands[0]['score'] < 21:
+            print("---------------------------------------")
             DEALER.display_hand(hole=False)
+            print("Dealer will hold...")
+            break
         else:
+            print("---------------------------------------")
             DEALER.display_hand(hole=False)
+            print("Dealer busts!")
             break
             
     for player in player_list:
