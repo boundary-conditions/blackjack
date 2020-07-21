@@ -47,6 +47,7 @@ class Cards:
                     total = 21
                     return total
                 elif i == 'A':
+                    print("----------------------------")
                     print(f"Player {player_num} has {hand}...")
                     ace = input("Ace high? y/n: ").strip().lower()
                     if ace == 'y':
