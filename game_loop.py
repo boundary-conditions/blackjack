@@ -72,6 +72,7 @@ while True:
     else:
         number_of_decks = input("How many decks should we play with? (1-4): ")
 cards = blackjackmodule.Cards(decks = number_of_decks)
+replace_deck = cards.cards
 DEALER = blackjackmodule.Dealer(cards)
 
 player_list = []        
@@ -171,7 +172,8 @@ while True:
     for player in player_list:
         player.display_balance()
         print("+++++++++++++++++++++")
-        
+    if len(cards.cards) < 21:
+        cards.shuffle(start_game=False)
     again = input("play again?: ").strip()
     if again == 'n':
         break

@@ -48,7 +48,10 @@ class Cards:
                     return total
                 elif i == 'A':
                     print(f"Player {player_num} has {hand}...")
-                    ace = input("Ace high? y/n: ").strip().lower()
+                    while True:
+                        ace = input("Ace high? y/n: ").strip().lower()
+                        if ace in 'yn' and len(ace) == 1: #can't just enter nothing either
+                            break
                     if ace == 'y':
                         i = '11'
                     else:
