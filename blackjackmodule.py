@@ -24,22 +24,24 @@ class Cards:
             
     def add_hand(self, hand, player_num=0, is_dealer=False): #has to go after each deal/hit
         total = 0
+        aces = 0
         if is_dealer:
-            aces = 0
             for i in hand:
                 if i in "JQK":
-                    i = 10
-                    total += i
-                elif i in "23456789":
+                    total += 10
+                elif i in "2345678910":
                     total += int(i)
                 else:
                     aces += 1
-            if aces == 1 and total < 11:
-                total += 11
-            elif aces == 1 and total >= 11:
-                total += 1
-            elif aces == 2:
-                total += 12
+            while True:
+                if aces > 0 and total < 11:
+                    total += 11
+                    aces -= 1
+                elif aces > 0 and total >= 11:
+                    total += 1
+                    aces -= 1
+                elif aces == 0:
+                    break
         else:
             for i in hand:
                 if i == 'A' and hand.index(i) == 0: #A will come before other letters, but after numbers
@@ -47,19 +49,20 @@ class Cards:
                     total = 21
                     return total
                 elif i == 'A':
-                    print(f"Player {player_num} has {hand}...")
-                    while True:
-                        ace = input("Ace high? y/n: ").strip().lower()
-                        if ace in 'yn' and len(ace) == 1: #can't just enter nothing either
-                            break
-                    if ace == 'y':
-                        i = '11'
-                    else:
-                        i = '1'
-                try:
-                    total += int(i)
-                except:
+                    aces += 1
+                elif i in "JQK":
                     total += 10
+                elif i in "2345678910":
+                    total += int(i)
+            while True:
+                if aces > 0 and total < 11:
+                    total += 11
+                    aces -= 1
+                elif aces > 0 and total >= 11:
+                    total += 1
+                    aces -= 1
+                elif aces == 0:
+                    break   
         return total
                 
             
